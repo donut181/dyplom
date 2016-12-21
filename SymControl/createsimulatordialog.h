@@ -2,6 +2,7 @@
 #define CREATESIMULATORDIALOG_H
 
 #include <QDialog>
+#include <Simulator.h>
 
 namespace Ui {
 class CreateSimulatorDialog;
@@ -14,6 +15,7 @@ class CreateSimulatorDialog : public QDialog
 public:
     explicit CreateSimulatorDialog(QWidget *parent = 0);
     ~CreateSimulatorDialog();
+    Simulator getData()const;
 
 private:
     Ui::CreateSimulatorDialog *ui;

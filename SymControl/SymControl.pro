@@ -13,8 +13,24 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    createsimulatordialog.cpp \
+    Simulator.cpp \
+    netlist.cpp \
+    extrastab.cpp \
+    ParseDialog.cpp \
+    OptionsTab.cpp \
+    Config.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    createsimulatordialog.h \
+    Simulator.h \
+    netlist.h \
+    extrastab.h \
+    ParseDialog.h \
+    OptionsTab.h \
+    Config.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    createsimulatordialog.ui \
+    parsedialog.ui

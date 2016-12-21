@@ -2,12 +2,13 @@
 #define EXTRASTAB_H
 
 #include <QWidget>
+#include <Config.h>
 
 class ExtrasTab : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ExtrasTab(QWidget *parent = 0);
+    explicit ExtrasTab(QString include,QString sim, QWidget *parent = 0);
 
 signals:
 

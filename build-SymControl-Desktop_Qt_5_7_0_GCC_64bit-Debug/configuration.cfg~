@@ -1,0 +1,120 @@
+# Config file made from adc_config.py
+# comments start with '#', keys are separated from values with '='
+
+#tech library
+include="/home/cdsmgr/cad/design_kits/TSMC130/TSMC_PDK/k4_v1.4/tsmc13rf/../models/spectre/tsmc13rf.scs"
+
+#symulator 2-hspice, 3-spectre, 4-aps
+sim=4
+spectre_turbo=True
+
+#fixed cores: ''=none
+processor=''
+
+#liczba procesorow do symulacji mt=-1 =>(spectra i aps) automatyczne wybranie max. liczby dostepnych na maszynie (spectra-8, aps-16)
+mt=4
+
+#wersja symulatora 32bit/64bit
+sim_bit=64
+
+#parasitics on(1)/off(0) (tylko spectra i aps)
+parasitics=1
+
+#dokladnosc symulatorow - spectra & aps => 'liberal'|'moderate'|'conservative'
+#errpreset='liberal'
+#errpreset='moderate'
+errpreset='conservative'
+
+#fixed time step. Option not used when not given
+#time_step=1e-18
+
+#gmin simulation option (typical=1e-12)
+gmin=1e-12
+
+#cmin simulation option. Not used when not given
+#cmin=1e-16
+
+#maxiters for dc simulations
+maxiters_dc=150
+
+#maxsteps for dc simulations
+maxsteps_dc=10000
+
+#maxiters for transient simulations
+maxiters_tran=5
+
+#katalog z wynikami symulacji (np.: 'wyniki/' lub '')
+result_dir='wyniki/'
+
+###############################################################
+# Simulation parameters
+###############################################################
+
+#output type 1-digital 0 analog
+dig_an_out=1
+
+#digital output name prefix (netlist: prefix<9>, prefix<8> ...)
+dig_out_name='D'
+
+#channel number for multiadc simulations - output will be taken as prefix<(multiadc_channel+1)*adc_bits-1> : prefix<multiadc_channel*adc_bits>
+#ie. for multiadc_channel=1 and adc_bits=10 script will parse output D<19>:D<10>
+#have to be set to 0 for signle channel simuation! 
+multiadc_channel=0
+
+#if multiadc_channel>0 script will parse all outputs from range (multiadc_channel, 0) if multiadc_parse_all is True (True/False)
+multiadc_parse_all=False
+
+#analog output name
+ana_out_name='Aout'
+
+#additional outputs table
+#for bus use syntax: bus_name<bus_size>
+add_out_name=[]
+#add_out_name=['coutp','coutn']
+#add_out_name=[]
+
+#parse additional outputs at end (1) / every single conversion (0)
+add_parse_end=1
+
+#netlista odpowiednia dla wybranego symulatora (np.: 'hspice.sp', 'spectre.scs', ...) 
+#netlist='dac613_ave_tinysh_shde_brv3_b32_115.scs'
+#netlist='8chnave_dcapvref2_1145.scs'
+#netlist='adc514_dac_avex_sym_m6w.scs'
+#netlist='adc623_dac_avex_sym_md05_2.scs'
+netlist='130nm_10b_netlist.scs'
+
+#amplituda sygnalu
+amp=1.07
+#amp=1.14
+
+#sampling frequency
+Fclk = 10e6
+
+#input sine frequency. Calculated automaticly from sampling frequency if not given
+#signalFreq=1.e6
+#nsignal=25
+
+#sampling period
+Tclk=1.0/Fclk
+
+#ilosc danych na wyjsciu (2^n) przy
+#n=4096
+#n=2048
+#n=1024
+#n=512
+#n=256
+n=128
+#n=32
+#n=16
+#n=4
+
+#punkty pomijane na poczatku dzialania adc
+dummy_point=2
+
+#offset czasu przy analizie pierwszej probki - data_parse.py
+#time_offset=Tclk+11.5e-9
+time_offset=Tclk+4e-9
+
+#digital level treshold - calculated as 'vsup'/2 if not given
+#dig_tresh=1.65
+

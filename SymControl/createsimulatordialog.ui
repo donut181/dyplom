@@ -1,15 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>CreateSimulatorDialog</class>
  <widget class="QDialog" name="CreateSimulatorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>383</width>
+    <height>295</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,8 +29,49 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
+  <widget class="QWidget" name="formLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>80</y>
+     <width>160</width>
+     <height>83</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="commandLabel">
+      <property name="text">
+       <string>Command</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="commandLineEdit"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="flag1Label">
+      <property name="text">
+       <string>Flag 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="flag1LineEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="flag2Label">
+      <property name="text">
+       <string>Flag 2</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="flag2LineEdit"/>
+    </item>
+   </layout>
+  </widget>
  </widget>
- <pixmapfunction/>
  <resources/>
  <connections>
   <connection>

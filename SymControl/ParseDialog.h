@@ -2,6 +2,9 @@
 #define PARSEDIALOG_H
 
 #include <QDialog>
+#include <QTabWidget>
+#include <QVBoxLayout>
+#include <netlist.h>
 
 namespace Ui {
 class ParseDialog;
@@ -17,6 +20,8 @@ public:
 
 private:
     Ui::ParseDialog *ui;
+    QTabWidget *tabWidget;
+    Netlist *m_netlist;
 };
 
 #endif // PARSEDIALOG_H

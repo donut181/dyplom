@@ -7,14 +7,14 @@ Simulator::Simulator(){
 	_stderr = "/dev/null";
 }
 
-void Simulator::setCommand(std::string program){
-	programName = program;
+void Simulator::setCommand(std::string command){
+	_command = command;
 	//adding flag 0 -> name of program
-	flags.push_back(programName.substr(programName.find_last_of('/')+1));
+	flags.push_back(_command.substr(_command.find_last_of('/')+1));
 }
 
-void Simulator::data(){
-	std::cout << "Program: " << programName
+void Simulator::print_data(){
+	std::cout << "Program: " << _command
 		<< " pid: " << pid << std::endl
 		<< "out:" << _stdout
 		<< " in :" << _stdin
@@ -23,12 +23,11 @@ void Simulator::data(){
 }
 
 void Simulator::start(){
-	if(programName.empty() || _stdin.empty() || _stdout.empty() || _stderr.empty()){
+	if(_command.empty() || _stdin.empty() || _stdout.empty() || _stderr.empty()){
 		std::cout << "cant start new process, no name,stdin,stdout or stderr" << std::endl;
 	}else{
 		pid = fork();
-		if(pid == 0){
-			//only for child
+		if(pid == 0){//only for child
 			
 			//steps to daemonize
 			//1.changing file mode mask
@@ -42,11 +41,11 @@ void Simulator::start(){
 			}
 
 			//3.changing dir so current wont be locked
-// 			if((chdir("/")) < 0){
-// 				std::cout << "error with chdir" << std::endl;
-// 			}
+			if((chdir("/")) < 0){
+				std::cout << "error with chdir" << std::endl;
+			}
 
-			//4.redirect stdio [to null?]
+			//4.redirect stdio [e.g. to null]
 			freopen(_stdin.c_str(),"r",stdin);
 			freopen(_stdout.c_str(),"w",stdout);
 			freopen(_stderr.c_str(),"w",stderr);
@@ -56,7 +55,7 @@ void Simulator::start(){
 				cFlags.push_back(const_cast<char*>(flags[i].c_str()));
 			cFlags.push_back(NULL);
 
-			if(execvp(programName.c_str(), &cFlags[0]) == -1){
+			if(execvp(_command.c_str(), &cFlags[0]) == -1){
 				std::cout<< "execvp failed" << std::endl;
 			}
 			
@@ -72,4 +71,8 @@ void Simulator::start(){
 
 void Simulator::kill(){
 	::kill(pid,SIGTERM);
+}
+
+void Simulator::setOut(std::string out){
+	_stdout = out;
 }

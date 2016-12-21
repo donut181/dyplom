@@ -13,7 +13,7 @@ class Simulator{
 	private:
 		pid_t pid;
 		pid_t sid;
-		std::string programName;
+		std::string _command;
 		std::string _stdout;
 		std::string _stdin;
 		std::string _stderr;
@@ -21,9 +21,10 @@ class Simulator{
 		std::vector<char*> cFlags;
 	public:
 		Simulator();
-		void setCommand(std::string program = "Sleeper.sh");
-		void data();
+		void setCommand(std::string command);
+		void print_data();
 		void start();
 		void kill();
+		void setOut(std::string out);
 };
 #endif

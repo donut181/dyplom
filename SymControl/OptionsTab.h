@@ -7,7 +7,7 @@ class OptionsTab : public QWidget
 {
     Q_OBJECT
 public:
-    explicit OptionsTab(QWidget *parent = 0);
+    explicit OptionsTab(QString options, QWidget *parent = 0);
 
 signals:
 
