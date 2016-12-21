@@ -53,15 +53,15 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionCreate">
    <property name="text">
     <string>Create</string>
@@ -70,6 +70,11 @@
   <action name="actionParse_scs">
    <property name="text">
     <string>Parse netlist(.scs)</string>
+   </property>
+  </action>
+  <action name="actionParse_netlist_scs">
+   <property name="text">
+    <string>Parse netlist (.scs)</string>
    </property>
   </action>
  </widget>

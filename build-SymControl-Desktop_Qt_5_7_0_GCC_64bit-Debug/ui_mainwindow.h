@@ -29,12 +29,13 @@ class Ui_MainWindow
 public:
     QAction *actionCreate;
     QAction *actionParse_scs;
+    QAction *actionParse_netlist_scs;
     QWidget *centralWidget;
     QTableWidget *tableWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
-    QToolBar *mainToolBar;
     QStatusBar *statusBar;
+    QToolBar *mainToolBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -45,6 +46,8 @@ public:
         actionCreate->setObjectName(QStringLiteral("actionCreate"));
         actionParse_scs = new QAction(MainWindow);
         actionParse_scs->setObjectName(QStringLiteral("actionParse_scs"));
+        actionParse_netlist_scs = new QAction(MainWindow);
+        actionParse_netlist_scs->setObjectName(QStringLiteral("actionParse_netlist_scs"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tableWidget = new QTableWidget(centralWidget);
@@ -63,12 +66,13 @@ public:
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         MainWindow->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(MainWindow);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
+        mainToolBar = new QToolBar(MainWindow);
+        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
+        MainWindow->insertToolBarBreak(mainToolBar);
 
         menuBar->addAction(menuFile->menuAction());
         menuFile->addAction(actionCreate);
@@ -83,7 +87,8 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         actionCreate->setText(QApplication::translate("MainWindow", "Create", 0));
-        actionParse_scs->setText(QApplication::translate("MainWindow", "Parse .scs", 0));
+        actionParse_scs->setText(QApplication::translate("MainWindow", "Parse netlist(.scs)", 0));
+        actionParse_netlist_scs->setText(QApplication::translate("MainWindow", "Parse netlist (.scs)", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "Command", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
