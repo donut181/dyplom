@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 #include <createsimulatordialog.h>
+#include <QFileDialog>
+#include <QDebug>
+#include <ParseDialog.h>
+#include <Config.h>
 
 namespace Ui {
 class MainWindow;

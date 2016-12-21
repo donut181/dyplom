@@ -17,19 +17,19 @@ SOURCES += main.cpp\
     createsimulatordialog.cpp \
     Simulator.cpp \
     netlist.cpp \
-    extrastab.cpp \
     ParseDialog.cpp \
     OptionsTab.cpp \
-    Config.cpp
+    Config.cpp \
+    extrasTab.cpp
 
 HEADERS  += mainwindow.h \
     createsimulatordialog.h \
     Simulator.h \
     netlist.h \
-    extrastab.h \
     ParseDialog.h \
     OptionsTab.h \
-    Config.h
+    Config.h \
+    extrasTab.h
 
 FORMS    += mainwindow.ui \
     createsimulatordialog.ui \

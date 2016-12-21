@@ -1,4 +1,4 @@
-#include "extrastab.h"
+#include "extrasTab.h"
 #include <QLabel>
 #include <QFormLayout>
 #include <QLineEdit>
@@ -12,12 +12,31 @@ ExtrasTab::ExtrasTab(QString include,QString sim, QWidget *parent) : QWidget(par
     foreach (QString a, simFlags) {
         if(a.contains("=")){
             QStringList flag = a.split("=");
-            QLineEdit *tmp = new QLineEdit(flag.last());
+            QString second;
+            QLineEdit *tmp;
+            bool n  = Config::instance().containsOption("n");
+            bool d  = Config::instance().containsOption("dummy_point");
+            bool f  = Config::instance().containsOption("Fclk");
+            bool t  = Config::instance().containsOption("time_offset");
+            if(flag.first() == "stop" && n && d && f && t){
+                double n,dp,f,to,stop_time;
+                n=Config::instance().getOption("n").toDouble();
+                dp=Config::instance().getOption("dummy_point").toDouble();
+                f=Config::instance().getOption("Fclk").toDouble();
+                to=Config::instance().getOption("time_offset").toDouble();
+                stop_time = (n+dp)/f + to;
+                std::cout << stop_time << std::endl;
+                second = QString::number(stop_time);
+                tmp = new QLineEdit(second);
+            }else{
+                tmp = new QLineEdit(flag.last());
+            }
             tmp->setObjectName(flag.first());
             layout->addRow(flag.first(),tmp);
         }
     }
-    //libs src
+
+    //libs src (include)
     QString edit;
     QString label;
     if(Config::instance().containsOption("include")){

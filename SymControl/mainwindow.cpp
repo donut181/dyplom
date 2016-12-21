@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QFileDialog>
-#include <QDebug>
-#include <ParseDialog.h>
-#include <Config.h>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

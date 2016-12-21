@@ -5,8 +5,10 @@ Config::Config()
 }
 
 void Config::load(){
+    //config src
     QString configFileName = "configuration.cfg";
     std::cout << configFileName.toStdString() << std::endl;
+
     QFile configFile(configFileName);
     if(configFile.open(QIODevice::ReadWrite | QIODevice::Text)){
         QTextStream file(&configFile);
@@ -19,7 +21,8 @@ void Config::load(){
 
             //for comments
             if(!line.startsWith('#') && !line.isEmpty()){
-                QStringList option = line.trimmed().split('=');
+                //parsing - simplified removes multiple spaces, replece removes left ones
+                QStringList option = line.simplified().replace(" ", "").split('=');
                 m_config.insert(option.first(),option.last());
             }
         }

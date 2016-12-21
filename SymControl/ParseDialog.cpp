@@ -1,7 +1,7 @@
 #include "ParseDialog.h"
 #include "ui_parsedialog.h"
 #include "OptionsTab.h"
-#include "extrastab.h"
+#include "extrasTab.h"
 #include <QDebug>
 
 ParseDialog::ParseDialog(QWidget *parent) :
