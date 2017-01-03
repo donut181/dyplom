@@ -7,7 +7,6 @@ Config::Config()
 void Config::load(){
     //config src
     QString configFileName = "configuration.cfg";
-    std::cout << configFileName.toStdString() << std::endl;
 
     QFile configFile(configFileName);
     if(configFile.open(QIODevice::ReadWrite | QIODevice::Text)){
@@ -20,13 +19,44 @@ void Config::load(){
             QString line = file.readLine();
 
             //for comments
-            if(!line.startsWith('#') && !line.isEmpty()){
-                //parsing - simplified removes multiple spaces, replece removes left ones
+            if(!line.startsWith('#') && !line.isEmpty() && line.contains("=")){
+                //parsing ( simplified() removes multiple spaces, replece() removes left ones)
                 QStringList option = line.simplified().replace(" ", "").split('=');
+
+                //parsing complicated values, like Tclk+<number> or 1/Tclk, but only 2 args, cant process sth+sth+sth
+                //and ignoring values of type string
+                if((option.last().contains("+") || option.last().contains("/") || option.last().contains("*") ) && !option.last().startsWith("'") && !option.last().startsWith("\"")){
+                    QChar oper;
+                    if(option.last().contains("+"))
+                        oper = '+';
+                    if(option.last().contains("/"))
+                        oper = '/';
+                    if(option.last().contains("*"))
+                        oper = '*';
+
+                    //std::cout << option.last().toStdString() << std::endl;
+
+                    QStringList complicatedOption = option.last().split(oper);
+                    double a,b;
+                    a = (m_config.contains(complicatedOption.first()) ? m_config.value(complicatedOption.first()).toDouble() : complicatedOption.first().toDouble());
+                    b = (m_config.contains(complicatedOption.last()) ? m_config.value(complicatedOption.last()).toDouble() : complicatedOption.last().toDouble());
+                    //std::cout << option.first().toStdString() << " : " << a << " " << b << std::endl;
+
+                    if(oper == '+')
+                        option.last() = QString::number(a+b);
+                    if(oper == '/')
+                        option.last() = QString::number(a/b);
+                    if(oper == '*')
+                        option.last() = QString::number(a*b);
+                }
+
+                //save this option
                 m_config.insert(option.first(),option.last());
             }
         }
         qDebug() << m_config;
+    }else{
+        std::cerr << "Config file loading failed" << std::endl;
     }
 
 

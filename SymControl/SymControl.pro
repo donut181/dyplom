@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     ParseDialog.cpp \
     OptionsTab.cpp \
     Config.cpp \
-    extrasTab.cpp
+    extrasTab.cpp \
+    OutputParser.cpp
 
 HEADERS  += mainwindow.h \
     createsimulatordialog.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     ParseDialog.h \
     OptionsTab.h \
     Config.h \
-    extrasTab.h
+    extrasTab.h \
+    OutputParser.h
 
 FORMS    += mainwindow.ui \
     createsimulatordialog.ui \

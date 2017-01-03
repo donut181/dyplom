@@ -46,10 +46,11 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Menu</string>
     </property>
     <addaction name="actionCreate"/>
     <addaction name="actionParse_scs"/>
+    <addaction name="actionParse_output_Sdat"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -59,7 +60,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
   </widget>
   <action name="actionCreate">
@@ -72,9 +73,9 @@
     <string>Parse netlist(.scs)</string>
    </property>
   </action>
-  <action name="actionParse_netlist_scs">
+  <action name="actionParse_output_Sdat">
    <property name="text">
-    <string>Parse netlist (.scs)</string>
+    <string>Parse output(.Sdat)</string>
    </property>
   </action>
  </widget>
