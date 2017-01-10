@@ -14,25 +14,15 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>10</y>
+      <y>20</y>
       <width>571</width>
-      <height>301</height>
+      <height>321</height>
      </rect>
     </property>
-    <column>
-     <property name="text">
-      <string>Command</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>1st flag</string>
-     </property>
-    </column>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

@@ -16,10 +16,11 @@ public:
     void parse();
     void rewrite();
 
-    QString parameters();
-    QString include();
-    QString simulatorOptions();
-    QString simulationType();
+    QString parameters()const;
+    QString include()const;
+    QString simulatorOptions()const;
+    QString simulationType()const;
+    QString fileName()const;
     void setParameters(QString parameters);
     void setInclude(QString include);
     void setSimulatorOptions(QString options);

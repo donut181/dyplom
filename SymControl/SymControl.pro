@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     OptionsTab.cpp \
     Config.cpp \
     extrasTab.cpp \
-    OutputParser.cpp
+    OutputParser.cpp \
+    ConfigureCommandDialog.cpp
 
 HEADERS  += mainwindow.h \
     createsimulatordialog.h \
@@ -31,8 +32,10 @@ HEADERS  += mainwindow.h \
     OptionsTab.h \
     Config.h \
     extrasTab.h \
-    OutputParser.h
+    OutputParser.h \
+    ConfigureCommandDialog.h
 
 FORMS    += mainwindow.ui \
     createsimulatordialog.ui \
-    parsedialog.ui
+    parsedialog.ui \
+    configurecommanddialog.ui

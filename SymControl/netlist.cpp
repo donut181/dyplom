@@ -80,17 +80,20 @@ void Netlist::parse(){
     }
 }
 
-QString Netlist::include(){
+QString Netlist::include()const{
     return m_include;
 }
-QString Netlist::parameters(){
+QString Netlist::parameters()const{
     return m_parameters;
 }
-QString Netlist::simulationType(){
+QString Netlist::simulationType()const{
     return m_simulationType;
 }
-QString Netlist::simulatorOptions(){
+QString Netlist::simulatorOptions()const{
     return m_simulatorOptions;
+}
+QString Netlist::fileName()const{
+    return m_filename;
 }
 
 void Netlist::setParameters(QString parameters){
@@ -147,8 +150,8 @@ void Netlist::rewrite(){
        }
     fileIn.close();
     fileOut.close();
-    //fileIn.remove();
-    //fileOut.rename(tmpFileName,fileName);
+    fileIn.remove();
+    fileOut.rename(tmpFileName,fileName);
     }else{
         std::cerr << "File error during rewriting netlist" << std::endl;
         qDebug() << fileName;

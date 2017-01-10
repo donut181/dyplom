@@ -8,6 +8,7 @@
 #include <ParseDialog.h>
 #include <Config.h>
 #include "OutputParser.h"
+#include "ConfigureCommandDialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,7 +23,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_actionCreate_triggered();
+    //void on_actionCreate_triggered();
 
     void on_actionParse_scs_triggered();
 
@@ -30,6 +31,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    const QString DEFAULT_SRC;
 };
 
 #endif // MAINWINDOW_H

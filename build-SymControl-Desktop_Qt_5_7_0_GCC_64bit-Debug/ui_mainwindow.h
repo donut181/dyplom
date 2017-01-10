@@ -18,7 +18,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
@@ -31,7 +31,7 @@ public:
     QAction *actionParse_scs;
     QAction *actionParse_output_Sdat;
     QWidget *centralWidget;
-    QTableWidget *tableWidget;
+    QTextEdit *textEdit;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QStatusBar *statusBar;
@@ -50,15 +50,9 @@ public:
         actionParse_output_Sdat->setObjectName(QStringLiteral("actionParse_output_Sdat"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        tableWidget = new QTableWidget(centralWidget);
-        if (tableWidget->columnCount() < 2)
-            tableWidget->setColumnCount(2);
-        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setGeometry(QRect(20, 10, 571, 301));
+        textEdit = new QTextEdit(centralWidget);
+        textEdit->setObjectName(QStringLiteral("textEdit"));
+        textEdit->setGeometry(QRect(20, 20, 571, 321));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -89,10 +83,6 @@ public:
         actionCreate->setText(QApplication::translate("MainWindow", "Create", 0));
         actionParse_scs->setText(QApplication::translate("MainWindow", "Parse netlist(.scs)", 0));
         actionParse_output_Sdat->setText(QApplication::translate("MainWindow", "Parse output(.Sdat)", 0));
-        QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "Command", 0));
-        QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "1st flag", 0));
         menuFile->setTitle(QApplication::translate("MainWindow", "Menu", 0));
     } // retranslateUi
 
