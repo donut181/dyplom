@@ -38,7 +38,6 @@
     <property name="title">
      <string>Menu</string>
     </property>
-    <addaction name="actionCreate"/>
     <addaction name="actionParse_scs"/>
     <addaction name="actionParse_output_Sdat"/>
    </widget>

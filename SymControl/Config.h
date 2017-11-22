@@ -6,7 +6,6 @@
 #include<iostream>
 #include<QTextStream>
 #include<QDebug>
-#include<QRegularExpression>
 
 class Config
 {
