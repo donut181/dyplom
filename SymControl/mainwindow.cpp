@@ -9,6 +9,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     Config::instance().load();
+    QString app_home_path;
+    if(Config::instance().containsOption("app_home"))
+        app_home_path = Config::instance().getOption("app_home");
+    else
+        app_home_path = QDir().homePath().append(QString("/Sim_app_workspace"));
+
+    QDir app_home(app_home_path);
+    if(!app_home.exists())
+        app_home.mkpath(".");
 }
 
 MainWindow::~MainWindow()
@@ -39,7 +48,11 @@ void MainWindow::on_actionParse_scs_triggered()
             netlist.rewrite();
             ConfigureCommandDialog configCommandDialog(netlist,this);
             if(configCommandDialog.exec()){
-                ui->textEdit->setText(configCommandDialog.getCommand());
+                std::cout << "rows: " << ui->tableWidget->rowCount()+0 << std::endl;
+                std::cout << "columns: " << ui->tableWidget->columnCount()+0 << std::endl;
+                ui->tableWidget->setRowCount(ui->tableWidget->rowCount()+1);
+                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,new QTableWidgetItem(configCommandDialog.getCommand()));
+                        //setText(configCommandDialog.getCommand());
             }
         }
     }

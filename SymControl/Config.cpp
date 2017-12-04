@@ -50,6 +50,9 @@ void Config::load(){
                         option.last() = QString::number(a*b);
                 }
 
+                if(option.first() == "app_home"){
+                    option.last().replace("\"","");
+                }
                 //save this option
                 m_config.insert(option.first(),option.last());
             }
