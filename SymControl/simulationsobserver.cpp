@@ -7,10 +7,9 @@ SimulationsObserver::SimulationsObserver(const QString &app_home_path):
 }
 
 void SimulationsObserver::run(){
-    int a = 1;
     while(true){
         QThread::sleep(1);
-        emit resultReady(QString::number(a));
-        ++a;
+        qDebug() << "observer has nothing to do";
+        emit resultReady(m_simulatorList);
     }
 }

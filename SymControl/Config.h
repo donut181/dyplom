@@ -16,6 +16,7 @@ public:
     }
     void load(); //reads configuration.cfg and saves options to m_config
     void save(); //empty for now
+    void setOption(const QString &key, const QString &value);
     bool containsOption(const QString &key)const;
     QString getOption(const QString &key)const;
 private:

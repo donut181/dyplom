@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <createsimulatordialog.h>
 #include <QFileDialog>
 #include <QDebug>
 #include <ParseDialog.h>
@@ -11,6 +10,7 @@
 #include "ConfigureCommandDialog.h"
 #include "simulationsobserver.h"
 #include "ui_mainwindow.h"
+#include "Simulator.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,7 +26,7 @@ public:
 
 private slots:
     //void on_actionCreate_triggered();
-    void on_result_from_sim_observer(const QString &s);
+    void on_result_from_sim_observer(const QStringList &s);
 
     void on_actionParse_scs_triggered();
 
@@ -34,11 +34,16 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QDir m_app_workspace;
     QString m_app_home_path;
+    QList<Simulator*> m_SimulatorList;
     const QString DEFAULT_SCS_SRC;
-    void startObservingWorkspace();
-    void prepareWorkspace();
 
+    void startObservingWorkspace()const;
+    void prepareWorkspace();
+    void populateSimulators(QStringList &s);
+    void prepareWorkspaceDir();
+    QStringList loadSimulatorListFromWorkspace();
 };
 
 #endif // MAINWINDOW_H

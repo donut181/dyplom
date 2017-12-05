@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent) :
     DEFAULT_SCS_SRC("/home/marcin/Pobrane")
 {
     ui->setupUi(this);
-    ui->tableWidget->setRowCount(1);
     Config::instance().load();
     prepareWorkspace();
     startObservingWorkspace();
@@ -14,19 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    foreach(Simulator* sim,m_SimulatorList){
+        delete sim;
+    }
     delete ui;
 }
-
-/*void MainWindow::on_actionCreate_triggered()
-{
-    CreateSimulatorDialog dialog(this);
-    if(dialog.exec()){
-        Simulator sim = dialog.getData(); //To trzebabędzie zmienić
-        sim.data();
-        ui->tableWidget->setRowCount(ui->tableWidget->rowCount()+1);
-        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,new QTableWidgetItem(QString::fromStdString(sim.command())));
-    }
-}*/
 
 void MainWindow::on_actionParse_scs_triggered()
 {
@@ -40,11 +31,8 @@ void MainWindow::on_actionParse_scs_triggered()
             netlist.rewrite();
             ConfigureCommandDialog configCommandDialog(netlist,this);
             if(configCommandDialog.exec()){
-                std::cout << "rows: " << ui->tableWidget->rowCount()+0 << std::endl;
-                std::cout << "columns: " << ui->tableWidget->columnCount()+0 << std::endl;
-                ui->tableWidget->setRowCount(ui->tableWidget->rowCount()+1);
-                ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0,new QTableWidgetItem(configCommandDialog.getCommand()));
-                        //setText(configCommandDialog.getCommand());
+                qDebug() << "DO SOMETHING WITH DIALOG RESULT";
+                //setText(configCommandDialog.getCommand());
             }
         }
     }
@@ -76,24 +64,64 @@ void MainWindow::on_actionParse_output_Sdat_triggered()
     }
 }
 
-void MainWindow::startObservingWorkspace(){
+void MainWindow::startObservingWorkspace()const{
     SimulationsObserver *sim_observer = new SimulationsObserver(m_app_home_path);
     connect(sim_observer,&SimulationsObserver::resultReady,this,&MainWindow::on_result_from_sim_observer);
     sim_observer->start();
 }
 
-void MainWindow::on_result_from_sim_observer(const QString &s){
-    ui->tableWidget->setItem(0,0,new QTableWidgetItem(s));
+void MainWindow::on_result_from_sim_observer(const QStringList &sl){
+    ui->tableWidget->setRowCount(sl.count());
+    qDebug() << sl.count();
+    for(int i=0; i<sl.count(); ++i){
+        ui->tableWidget->setItem(i,1,new QTableWidgetItem(sl.at(i)));
+    }
+}
+
+void MainWindow::prepareWorkspaceDir()
+{
+    if(Config::instance().containsOption("app_home"))
+        m_app_home_path = Config::instance().getOption("app_home");
+    else{
+        m_app_home_path = QDir().homePath().append(QString("/.Sim_app_workspace"));
+        Config::instance().setOption("app_home",m_app_home_path);
+    }
+
+    m_app_workspace = QDir(m_app_home_path);
+    if(!m_app_workspace.exists())
+        m_app_workspace.mkpath(".");
+}
+
+QStringList MainWindow::loadSimulatorListFromWorkspace()
+{
+    QStringList simulatorList = m_app_workspace.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    for(int i = 0; i<simulatorList.count(); ++i){
+        QDir tmpDir = QDir(QString(m_app_home_path).append('/').append(simulatorList.at(i)));
+        QStringList tmpDirContent = tmpDir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+        if(tmpDirContent.count() == 0){
+            qDebug() << "Empty sim folder";
+            simulatorList.removeAt(i--);
+            continue;
+        }
+        if(!tmpDirContent.contains("command")){
+            qDebug() << "No command file in sim folder";
+            simulatorList.removeAt(i--);
+            continue;
+        }
+    }
+    return simulatorList;
+}
+
+void MainWindow::populateSimulators(QStringList &simUids){
+    foreach(QString simUid, simUids){
+        m_SimulatorList.append(new Simulator(QString(m_app_home_path).append('/').append(simUid)));
+    }
 }
 
 void MainWindow::prepareWorkspace()
 {
-    if(Config::instance().containsOption("app_home"))
-        m_app_home_path = Config::instance().getOption("app_home");
-    else
-        m_app_home_path = QDir().homePath().append(QString("/Sim_app_workspace"));
-
-    QDir app_home(m_app_home_path);
-    if(!app_home.exists())
-        app_home.mkpath(".");
+    prepareWorkspaceDir();
+    QStringList simListFromWorkspace = loadSimulatorListFromWorkspace();
+    populateSimulators(simListFromWorkspace);
+    qDebug() << m_SimulatorList;
 }

@@ -7,6 +7,10 @@ Simulator::Simulator(){
     _stderr = "/dev/null";
 }
 
+Simulator::Simulator(QString workspace_path){
+
+}
+
 void Simulator::setCommand(std::string program){
     programName = program;
     //adding flag 0 -> name of program

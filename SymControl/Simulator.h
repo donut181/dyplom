@@ -9,6 +9,7 @@
 #include<signal.h>
 #include<unistd.h>
 #include<iostream>
+#include<QString>
 
 class Simulator{
     private:
@@ -20,8 +21,10 @@ class Simulator{
         std::string _stderr;
         std::vector<std::string> flags;
         std::vector<char*> cFlags;
-    public:
+
+public:
         Simulator();
+        Simulator(QString workspace_path);
         void setCommand(std::string program = "Sleeper.sh");
         void addFlag(std::string flag);
         std::string command()const;

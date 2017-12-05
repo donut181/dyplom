@@ -14,7 +14,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    createsimulatordialog.cpp \
     Simulator.cpp \
     netlist.cpp \
     ParseDialog.cpp \
@@ -26,7 +25,6 @@ SOURCES += main.cpp\
     simulationsobserver.cpp
 
 HEADERS  += mainwindow.h \
-    createsimulatordialog.h \
     Simulator.h \
     netlist.h \
     ParseDialog.h \
@@ -38,6 +36,5 @@ HEADERS  += mainwindow.h \
     simulationsobserver.h
 
 FORMS    += mainwindow.ui \
-    createsimulatordialog.ui \
     parsedialog.ui \
     configurecommanddialog.ui

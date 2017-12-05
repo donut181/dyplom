@@ -64,6 +64,9 @@ void Config::load(){
 
 
 }
+void Config::setOption(const QString &key, const QString &value){
+    m_config.insert(key,value);
+}
 
 void Config::save(){
 
