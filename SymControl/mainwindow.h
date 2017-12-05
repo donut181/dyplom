@@ -9,6 +9,8 @@
 #include <Config.h>
 #include "OutputParser.h"
 #include "ConfigureCommandDialog.h"
+#include "simulationsobserver.h"
+#include "ui_mainwindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +26,7 @@ public:
 
 private slots:
     //void on_actionCreate_triggered();
+    void on_result_from_sim_observer(const QString &s);
 
     void on_actionParse_scs_triggered();
 
@@ -31,8 +34,11 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QString m_app_home_path;
+    const QString DEFAULT_SCS_SRC;
+    void startObservingWorkspace();
+    void prepareWorkspace();
 
-    const QString DEFAULT_SRC;
 };
 
 #endif // MAINWINDOW_H
