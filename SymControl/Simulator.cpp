@@ -5,10 +5,13 @@ Simulator::Simulator(){
     _stdout = "/dev/null";
     _stdin = "/dev/null";
     _stderr = "/dev/null";
+    m_state = "fresh";
 }
 
 Simulator::Simulator(QString workspace_path){
-
+    Simulator();
+    m_workspace = workspace_path;
+    qDebug() << "Do sth with command!";
 }
 
 void Simulator::setCommand(std::string program){
@@ -55,7 +58,7 @@ void Simulator::start(){
                 std::cout << "error with setsid" << std::endl;
             }
 
-            //3.changing dir so current wont be locked
+//          3.changing dir so current wont be locked
 // 			if((chdir("/")) < 0){
 // 				std::cout << "error with chdir" << std::endl;
 // 			}

@@ -21,6 +21,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionParse_scs_triggered()
 {
+    QUuid uuid = QUuid();
     QString filename = QFileDialog::getOpenFileName(this,QObject::tr("Chose Netlist"),DEFAULT_SCS_SRC,QObject::tr("Netlist Files (*.scs)"));
     if(filename.isEmpty()){
         std::cout << tr("No file specified").toStdString() << std::endl;
@@ -28,11 +29,20 @@ void MainWindow::on_actionParse_scs_triggered()
         ParseDialog parseDialog(filename,this);
         if(parseDialog.exec()){
             Netlist netlist = parseDialog.getData();
-            netlist.rewrite();
             ConfigureCommandDialog configCommandDialog(netlist,this);
             if(configCommandDialog.exec()){
                 qDebug() << "DO SOMETHING WITH DIALOG RESULT";
-                //setText(configCommandDialog.getCommand());
+                QString process_dir_path = QString(m_app_home_path).append('/').append(uuid.createUuid().toString());
+                QString process_netlist_path = QString(process_dir_path).append('/').append(QFileInfo(netlist.fileName()).fileName());
+                QString process_command_path = QString(process_dir_path).append("/command");
+                QDir().mkdir(process_dir_path);
+                netlist.rewrite(process_netlist_path);
+                QFile command_file(process_command_path);
+                if (command_file.open(QIODevice::WriteOnly)){
+                    QTextStream stream (&command_file);
+                    stream << configCommandDialog.getCommand();
+                }
+                m_SimulatorList.append(new Simulator(process_dir_path));
             }
         }
     }
@@ -70,11 +80,32 @@ void MainWindow::startObservingWorkspace()const{
     sim_observer->start();
 }
 
-void MainWindow::on_result_from_sim_observer(const QStringList &sl){
-    ui->tableWidget->setRowCount(sl.count());
-    qDebug() << sl.count();
-    for(int i=0; i<sl.count(); ++i){
-        ui->tableWidget->setItem(i,1,new QTableWidgetItem(sl.at(i)));
+void MainWindow::on_result_from_sim_observer(const QStringList &sim_list){
+    ui->tableWidget->setRowCount(sim_list.count());
+    qDebug() << sim_list.count();
+    for(int i=0; i<sim_list.count(); ++i){
+        QString sim_dir_path = QString(m_app_home_path).append('/').append(sim_list.at(i));
+        QDir sim_files(sim_dir_path);
+        QStringList sim_parts = sim_files.entryList(QDir::Files);
+        if(sim_parts.contains("command")){
+            QFile command_file(QString(sim_dir_path).append("/command"));
+            if(command_file.open(QIODevice::ReadOnly)){
+                QTextStream in(&command_file);
+                QString command_string = in.readLine();
+                ui->tableWidget->setItem(i,3,new QTableWidgetItem(command_string));
+                command_file.close();
+            }
+
+        }
+        foreach (QString sim_part, sim_parts) {
+            if(sim_part.right(4) == ".scs"){
+                qDebug() << sim_part << " is a netlist";
+                ui->tableWidget->setItem(i,2,new QTableWidgetItem(sim_part));
+            }
+        }
+
+        qDebug() << sim_parts;
+        ui->tableWidget->setItem(i,0,new QTableWidgetItem(sim_list.at(i)));
     }
 }
 

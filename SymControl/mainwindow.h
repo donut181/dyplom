@@ -11,6 +11,7 @@
 #include "simulationsobserver.h"
 #include "ui_mainwindow.h"
 #include "Simulator.h"
+#include<QUuid>
 
 namespace Ui {
 class MainWindow;

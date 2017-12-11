@@ -109,13 +109,11 @@ void Netlist::setSimulatorType(QString type){
     m_simulationType = type;
 }
 
-void Netlist::rewrite(){
+void Netlist::rewrite(const QString newFileName){
     QString fileName = m_filename;
-    QString tmpFileName = m_filename;
-    tmpFileName.append("_tmp");
 
     QFile fileIn(fileName);
-    QFile fileOut(tmpFileName);
+    QFile fileOut(newFileName);
     if(fileIn.open(QIODevice::ReadOnly | QIODevice::Text) &&
        fileOut.open(QIODevice::Append | QIODevice::Text)){
 
@@ -150,11 +148,11 @@ void Netlist::rewrite(){
        }
     fileIn.close();
     fileOut.close();
-    fileIn.remove();
-    fileOut.rename(tmpFileName,fileName);
+    //fileIn.remove();
+    //fileOut.rename(tmpFileName,fileName);
     }else{
         std::cerr << "File error during rewriting netlist" << std::endl;
         qDebug() << fileName;
-        qDebug() << tmpFileName;
+        qDebug() << newFileName;
     }
 }

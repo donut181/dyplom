@@ -27,6 +27,16 @@
         <string>PID</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>Netlist</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Command</string>
+       </property>
+      </column>
      </widget>
     </item>
    </layout>

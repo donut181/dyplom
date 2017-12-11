@@ -10,6 +10,7 @@
 #include<unistd.h>
 #include<iostream>
 #include<QString>
+#include<QDebug>
 
 class Simulator{
     private:
@@ -21,6 +22,8 @@ class Simulator{
         std::string _stderr;
         std::vector<std::string> flags;
         std::vector<char*> cFlags;
+        QString m_state;
+        QString m_workspace;
 
 public:
         Simulator();

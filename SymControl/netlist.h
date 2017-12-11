@@ -14,7 +14,7 @@ class Netlist
 public:
     Netlist(const QString &filename);
     void parse();
-    void rewrite();
+    void rewrite(const QString newFileName);
 
     QString parameters()const;
     QString include()const;

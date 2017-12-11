@@ -8,8 +8,9 @@ SimulationsObserver::SimulationsObserver(const QString &app_home_path):
 
 void SimulationsObserver::run(){
     while(true){
-        QThread::sleep(1);
-        qDebug() << "observer has nothing to do";
+        QThread::sleep(2);
+        qDebug() << "observer report every 2 sec";
+        m_simulatorList = m_app_workspace.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
         emit resultReady(m_simulatorList);
     }
 }
