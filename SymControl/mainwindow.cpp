@@ -82,17 +82,16 @@ void MainWindow::startObservingWorkspace()const{
 
 void MainWindow::on_result_from_sim_observer(const QStringList &sim_list){
     ui->tableWidget->setRowCount(sim_list.count());
-    qDebug() << sim_list.count();
     for(int i=0; i<sim_list.count(); ++i){
         QString sim_dir_path = QString(m_app_home_path).append('/').append(sim_list.at(i));
         QDir sim_files(sim_dir_path);
         QStringList sim_parts = sim_files.entryList(QDir::Files);
-        if(sim_parts.contains("command")){
-            QFile command_file(QString(sim_dir_path).append("/command"));
+        if(sim_parts.contains("pid")){
+            QFile command_file(QString(sim_dir_path).append("/pid"));
             if(command_file.open(QIODevice::ReadOnly)){
                 QTextStream in(&command_file);
                 QString command_string = in.readLine();
-                ui->tableWidget->setItem(i,3,new QTableWidgetItem(command_string));
+                ui->tableWidget->setItem(i,1,new QTableWidgetItem(command_string));
                 command_file.close();
             }
 

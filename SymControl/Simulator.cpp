@@ -8,10 +8,16 @@ Simulator::Simulator(){
     m_state = "fresh";
 }
 
-Simulator::Simulator(QString workspace_path){
-    Simulator();
+Simulator::Simulator(QString workspace_path): Simulator(){
     m_workspace = workspace_path;
     qDebug() << "Do sth with command!";
+    setCommand("python");
+    addFlag("/home/marcin/bin/spectre.py");
+    addFlag("asdf");
+    addFlag("orly?");
+    addFlag("hehehe");
+    data();
+    start();
 }
 
 void Simulator::setCommand(std::string program){
@@ -82,7 +88,7 @@ void Simulator::start(){
             //error
             std::cout << "error during fork() " << std::endl;
         }else{
-            std::cout << "child process has started" << std::endl;
+            std::cout << "child process has started " << pid << std::endl;
         }
     }
 }
