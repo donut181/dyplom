@@ -41,7 +41,8 @@ void Simulator::data(){
         << " pid: " << pid << std::endl
         << "out:" << _stdout
         << " in :" << _stdin
-        << " err:" << _stderr
+        << " err:" << _stderr << std::endl
+        << m_workspace.toStdString()
         << std::endl<<std::endl;
 }
 
@@ -64,10 +65,10 @@ void Simulator::start(){
                 std::cout << "error with setsid" << std::endl;
             }
 
-//          3.changing dir so current wont be locked
-// 			if((chdir("/")) < 0){
-// 				std::cout << "error with chdir" << std::endl;
-// 			}
+            //3.changing dir so current wont be locked
+            if((chdir(m_workspace.toStdString().c_str())) < 0){
+                std::cout << "error with chdir" << std::endl;
+            }
 
             //4.redirect stdio [to null?]
             freopen(_stdin.c_str(),"r",stdin);
