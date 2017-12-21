@@ -9,17 +9,11 @@
 class SimulationsObserver : public QThread {
     Q_OBJECT
 
-public:
-    SimulationsObserver(const QString &app_home_path);
-
 private:
-    QStringList m_simulatorList;
-    QDir m_app_workspace;
     void run() override;
-    void listSimulations();
 
 signals:
-    void resultReady(const QStringList &result);
+    void refresh_signal();
 
 };
 

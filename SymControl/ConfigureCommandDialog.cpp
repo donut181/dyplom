@@ -60,10 +60,7 @@ ConfigureCommandDialog::ConfigureCommandDialog(const Netlist& netlist,QWidget *p
             }
         }
     }
-    QString dir;
-    if(Config::instance().containsOption("result_dir")){
-        dir = Config::instance().getOption("result_dir").replace("'","").replace("\"","");
-    }
+
     QString netlistFileName = netlist.fileName();
     if(netlistFileName.contains("/")){
         //cutting name from directory tree
@@ -75,7 +72,6 @@ ConfigureCommandDialog::ConfigureCommandDialog(const Netlist& netlist,QWidget *p
 
     //"=log"
     QString logFileName = netlistFileName;
-    logFileName.prepend(dir);
     logFileName.append(nameEnding); //"_fclk_n_delay"
     logFileName.append(".log"); //extension
     QLineEdit *logSrc = new QLineEdit(logFileName);
@@ -89,7 +85,6 @@ ConfigureCommandDialog::ConfigureCommandDialog(const Netlist& netlist,QWidget *p
 
     //"-raw"
     QString outFileName = netlistFileName;
-    outFileName.prepend(dir);
     outFileName.append(nameEnding); //"_fclk_n_delay"
     outFileName.append(".Sdat"); //extension
     QLineEdit *outSrc = new QLineEdit(outFileName);
@@ -145,7 +140,7 @@ ConfigureCommandDialog::~ConfigureCommandDialog()
 }
 
 QString ConfigureCommandDialog::getCommand()const{
-    QString command = "spectre ";
+    QString command = "";
     if(m_checkboxList.value("escchars")->isChecked()){
         command.append("+escchars").append(" ");
     }

@@ -8,7 +8,7 @@
 #include <Config.h>
 #include "OutputParser.h"
 #include "ConfigureCommandDialog.h"
-#include "simulationsobserver.h"
+#include "SimulationsObserver.h"
 #include "ui_mainwindow.h"
 #include "Simulator.h"
 #include<QUuid>
@@ -27,7 +27,7 @@ public:
 
 private slots:
     //void on_actionCreate_triggered();
-    void on_result_from_sim_observer(const QStringList &s);
+    void refresh_on_signal_from_ovserver();
 
     void on_actionParse_scs_triggered();
 
@@ -39,8 +39,9 @@ private:
     QString m_app_home_path;
     QList<Simulator*> m_SimulatorList;
     const QString DEFAULT_SCS_SRC;
+    SimulationsObserver *m_sim_observer;
 
-    void startObservingWorkspace()const;
+    void startObservingWorkspace();
     void prepareWorkspace();
     void populateSimulators(QStringList &s);
     void prepareWorkspaceDir();

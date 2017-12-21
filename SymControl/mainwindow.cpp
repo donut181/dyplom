@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete m_sim_observer;
     foreach(Simulator* sim,m_SimulatorList){
         delete sim;
     }
@@ -21,7 +22,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionParse_scs_triggered()
 {
-    QUuid uuid = QUuid();
     QString filename = QFileDialog::getOpenFileName(this,QObject::tr("Chose Netlist"),DEFAULT_SCS_SRC,QObject::tr("Netlist Files (*.scs)"));
     if(filename.isEmpty()){
         std::cout << tr("No file specified").toStdString() << std::endl;
@@ -31,18 +31,29 @@ void MainWindow::on_actionParse_scs_triggered()
             Netlist netlist = parseDialog.getData();
             ConfigureCommandDialog configCommandDialog(netlist,this);
             if(configCommandDialog.exec()){
-                qDebug() << "DO SOMETHING WITH DIALOG RESULT";
-                QString process_dir_path = QString(m_app_home_path).append('/').append(uuid.createUuid().toString());
+                QString uuid = QUuid().createUuid().toString();
+                QString process_dir_path = QString(m_app_home_path).append('/').append(uuid);
                 QString process_netlist_path = QString(process_dir_path).append('/').append(QFileInfo(netlist.fileName()).fileName());
                 QString process_command_path = QString(process_dir_path).append("/command");
+                QString state_path = QString(process_dir_path).append("/state");
                 QDir().mkdir(process_dir_path);
                 netlist.rewrite(process_netlist_path);
                 QFile command_file(process_command_path);
                 if (command_file.open(QIODevice::WriteOnly)){
                     QTextStream stream (&command_file);
                     stream << configCommandDialog.getCommand();
-                }
-                m_SimulatorList.append(new Simulator(process_dir_path));
+                    command_file.close();
+                }else
+                    qDebug() << "can't open comand file for writing";
+                QFile state_file(state_path);
+                if (state_file.open(QIODevice::WriteOnly)){
+                    QTextStream state_file_stream(&state_file);
+                    state_file_stream << "fresh";
+                    state_file.close();
+                }else
+                    qDebug() << "can't open status file for writing";
+
+                m_SimulatorList.append(new Simulator(m_app_home_path, uuid));
             }
         }
     }
@@ -53,6 +64,7 @@ void MainWindow::on_actionParse_output_Sdat_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this,QObject::tr("Chose output file"),DEFAULT_SCS_SRC,QObject::tr("Output Files (*.sdat)"));
     if(filename.isEmpty()){
+
         std::cout << tr("No file specified").toStdString() << std::endl;
     }else{
         OutputParser parser(filename);
@@ -74,38 +86,43 @@ void MainWindow::on_actionParse_output_Sdat_triggered()
     }
 }
 
-void MainWindow::startObservingWorkspace()const{
-    SimulationsObserver *sim_observer = new SimulationsObserver(m_app_home_path);
-    connect(sim_observer,&SimulationsObserver::resultReady,this,&MainWindow::on_result_from_sim_observer);
-    sim_observer->start();
+void MainWindow::startObservingWorkspace(){
+    m_sim_observer = new SimulationsObserver();
+    connect(m_sim_observer,&SimulationsObserver::refresh_signal,this,&MainWindow::refresh_on_signal_from_ovserver);
+    m_sim_observer->start();
 }
 
-void MainWindow::on_result_from_sim_observer(const QStringList &sim_list){
-    ui->tableWidget->setRowCount(sim_list.count());
-    for(int i=0; i<sim_list.count(); ++i){
-        QString sim_dir_path = QString(m_app_home_path).append('/').append(sim_list.at(i));
-        QDir sim_files(sim_dir_path);
-        QStringList sim_parts = sim_files.entryList(QDir::Files);
-        if(sim_parts.contains("pid")){
-            QFile command_file(QString(sim_dir_path).append("/pid"));
-            if(command_file.open(QIODevice::ReadOnly)){
-                QTextStream in(&command_file);
-                QString command_string = in.readLine();
-                ui->tableWidget->setItem(i,1,new QTableWidgetItem(command_string));
-                command_file.close();
-            }
-
-        }
-        foreach (QString sim_part, sim_parts) {
-            if(sim_part.right(4) == ".scs"){
-                qDebug() << sim_part << " is a netlist";
-                ui->tableWidget->setItem(i,2,new QTableWidgetItem(sim_part));
-            }
-        }
-
-        qDebug() << sim_parts;
-        ui->tableWidget->setItem(i,0,new QTableWidgetItem(sim_list.at(i)));
+void MainWindow::refresh_on_signal_from_ovserver(){
+    for(int i=0; i < m_SimulatorList.length(); ++i){
+        m_SimulatorList.at(i)->refresh_state();
+        qDebug() << ".";
     }
+    qDebug() << "refreshing not implemented";
+//    ui->tableWidget->setRowCount(sim_list.count());
+//    for(int i=0; i<sim_list.count(); ++i){
+//        QString sim_dir_path = QString(m_app_home_path).append('/').append(sim_list.at(i));
+//        QDir sim_files(sim_dir_path);
+//        QStringList sim_parts = sim_files.entryList(QDir::Files);
+//        if(sim_parts.contains("pid")){
+//            QFile command_file(QString(sim_dir_path).append("/pid"));
+//            if(command_file.open(QIODevice::ReadOnly)){
+//                QTextStream in(&command_file);
+//                QString command_string = in.readLine();
+//                ui->tableWidget->setItem(i,1,new QTableWidgetItem(command_string));
+//                command_file.close();
+//            }
+
+//        }
+//        foreach (QString sim_part, sim_parts) {
+//            if(sim_part.right(4) == ".scs"){
+//                qDebug() << sim_part << " is a netlist";
+//                ui->tableWidget->setItem(i,2,new QTableWidgetItem(sim_part));
+//            }
+//        }
+
+//        qDebug() << sim_parts;
+//        ui->tableWidget->setItem(i,0,new QTableWidgetItem(sim_list.at(i)));
+//    }
 }
 
 void MainWindow::prepareWorkspaceDir()
@@ -144,7 +161,7 @@ QStringList MainWindow::loadSimulatorListFromWorkspace()
 
 void MainWindow::populateSimulators(QStringList &simUids){
     foreach(QString simUid, simUids){
-        m_SimulatorList.append(new Simulator(QString(m_app_home_path).append('/').append(simUid)));
+        m_SimulatorList.append(new Simulator(QString(m_app_home_path),simUid));
     }
 }
 
@@ -153,5 +170,4 @@ void MainWindow::prepareWorkspace()
     prepareWorkspaceDir();
     QStringList simListFromWorkspace = loadSimulatorListFromWorkspace();
     populateSimulators(simListFromWorkspace);
-    qDebug() << m_SimulatorList;
 }

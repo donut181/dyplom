@@ -58,6 +58,7 @@ void Config::load(){
             }
         }
         qDebug() << m_config;
+        configFile.close();
     }else{
         std::cerr << "Config file loading failed" << std::endl;
     }

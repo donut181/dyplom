@@ -11,9 +11,12 @@
 #include<iostream>
 #include<QString>
 #include<QDebug>
+#include<Config.h>
 
 class Simulator{
     private:
+        Simulator();
+
         pid_t pid;
         pid_t sid;
         std::string programName;
@@ -23,17 +26,24 @@ class Simulator{
         std::vector<std::string> flags;
         std::vector<char*> cFlags;
         QString m_state;
+        QString m_progress;
         QString m_workspace;
+        QString m_stateFile = "state";
 
-public:
-        Simulator();
-        Simulator(QString workspace_path);
-        void setCommand(std::string program = "Sleeper.sh");
-        void addFlag(std::string flag);
-        std::string command()const;
-        std::string firstFlag()const;
-        void data();
+        void setState(QString);
+        void getState();
         void start();
-        void kill();
+        void setCommand(std::string);
+        void prepareCommand();
+        void write_pid_to_file();
+        void get_progress();
+public:
+        Simulator(QString workspace_path,QString uuid);
+        void addFlag(std::string flag);
+        void data();
+        void refresh_state();
+        //void kill();
+
+        QString m_uuid;
 };
 #endif // SIMULATOR_H
