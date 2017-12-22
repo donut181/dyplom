@@ -12,6 +12,7 @@
 #include<QString>
 #include<QDebug>
 #include<Config.h>
+#include<OutputParser.h>
 
 class Simulator{
     private:
@@ -37,11 +38,15 @@ class Simulator{
         void prepareCommand();
         void write_pid_to_file();
         void get_progress();
+        void calculate_results();
+        void calculate_fft();
+
 public:
         Simulator(QString workspace_path,QString uuid);
         void addFlag(std::string flag);
         void data();
         void refresh_state();
+        QStringList report_state();
         //void kill();
 
         QString m_uuid;

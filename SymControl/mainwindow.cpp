@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     DEFAULT_SCS_SRC("/home/marcin/Pobrane")
 {
     ui->setupUi(this);
+    ui->tableWidget->setColumnWidth(2,300);
+    ui->tableWidget->setColumnWidth(3,150);
     Config::instance().load();
     prepareWorkspace();
     startObservingWorkspace();
@@ -95,34 +97,16 @@ void MainWindow::startObservingWorkspace(){
 void MainWindow::refresh_on_signal_from_ovserver(){
     for(int i=0; i < m_SimulatorList.length(); ++i){
         m_SimulatorList.at(i)->refresh_state();
-        qDebug() << ".";
     }
-    qDebug() << "refreshing not implemented";
-//    ui->tableWidget->setRowCount(sim_list.count());
-//    for(int i=0; i<sim_list.count(); ++i){
-//        QString sim_dir_path = QString(m_app_home_path).append('/').append(sim_list.at(i));
-//        QDir sim_files(sim_dir_path);
-//        QStringList sim_parts = sim_files.entryList(QDir::Files);
-//        if(sim_parts.contains("pid")){
-//            QFile command_file(QString(sim_dir_path).append("/pid"));
-//            if(command_file.open(QIODevice::ReadOnly)){
-//                QTextStream in(&command_file);
-//                QString command_string = in.readLine();
-//                ui->tableWidget->setItem(i,1,new QTableWidgetItem(command_string));
-//                command_file.close();
-//            }
 
-//        }
-//        foreach (QString sim_part, sim_parts) {
-//            if(sim_part.right(4) == ".scs"){
-//                qDebug() << sim_part << " is a netlist";
-//                ui->tableWidget->setItem(i,2,new QTableWidgetItem(sim_part));
-//            }
-//        }
-
-//        qDebug() << sim_parts;
-//        ui->tableWidget->setItem(i,0,new QTableWidgetItem(sim_list.at(i)));
-//    }
+    ui->tableWidget->setRowCount(m_SimulatorList.count());
+    for(int i=0; i<m_SimulatorList.count(); ++i){
+        QStringList report = m_SimulatorList.at(i)->report_state();
+        ui->tableWidget->setItem(i,0,new QTableWidgetItem(m_SimulatorList.at(i)->m_uuid));
+        ui->tableWidget->setItem(i,1,new QTableWidgetItem(report.at(0)));
+        ui->tableWidget->setItem(i,2,new QTableWidgetItem(report.at(1)));
+        ui->tableWidget->setItem(i,3,new QTableWidgetItem(report.at(2)));
+    }
 }
 
 void MainWindow::prepareWorkspaceDir()

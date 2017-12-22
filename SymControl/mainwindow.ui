@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>778</width>
-    <height>478</height>
+    <width>865</width>
+    <height>598</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,12 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTableWidget" name="tableWidget">
+      <property name="minimumSize">
+       <size>
+        <width>760</width>
+        <height>0</height>
+       </size>
+      </property>
       <column>
        <property name="text">
         <string>Id</string>
@@ -34,7 +40,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Command</string>
+        <string>State</string>
        </property>
       </column>
      </widget>
@@ -46,7 +52,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>778</width>
+     <width>865</width>
      <height>20</height>
     </rect>
    </property>

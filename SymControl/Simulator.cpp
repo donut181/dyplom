@@ -15,6 +15,15 @@ Simulator::Simulator(QString workspace_path, QString uuid): Simulator(){
     else
         setCommand("spectre");
     prepareCommand();
+    QString pid_file_path = QString(m_workspace).append("/pid");
+    QFile pid_file(pid_file_path);
+    if(pid_file.exists()){
+        if(pid_file.open(QIODevice::ReadOnly)){
+            QString read_pid = QTextStream(&pid_file).readLine();
+            pid = read_pid.toInt();
+        }else
+            qDebug() << "can't open pid file for " << m_uuid;
+    }
     data();
 }
 
@@ -78,6 +87,40 @@ void Simulator::get_progress()
     }
 }
 
+void Simulator::calculate_fft()
+{
+    QString sdat_file_path = QString(m_workspace).append('/');
+    foreach (std::string flag, flags) {
+        if(QString::fromStdString(flag).contains(".Sdat")){
+            sdat_file_path.append(QString::fromStdString(flag));
+            break;
+        }
+    }
+
+    OutputParser parser(sdat_file_path);
+    parser.parse();
+    int n;
+    if(Config::instance().containsOption("n"))
+        n=Config::instance().getOption("n").toInt();
+    else{
+        std::cout << "No N specified in config, using n=128" << std::endl;
+        n=128;
+    }
+    parser.limitValuesNumber(n);
+    parser.ffTransform();
+    std::cout << "size: " << parser.m_fft.size() << std::endl;
+    parser.saveValuesToFile();
+    std::cout << "size: " << parser.m_fft.size() << std::endl;
+    parser.saveFftToFile();
+    std::cout << "size: " << parser.m_fft.size() << std::endl;
+}
+
+void Simulator::calculate_results()
+{
+    calculate_fft();
+    setState("finished");
+}
+
 void Simulator::setCommand(std::string program){
     programName = program;
     //adding flag 0 -> name of program
@@ -139,11 +182,33 @@ void Simulator::refresh_state()
             get_progress();
         }else if(m_state.contains("ready")){
             qDebug() << m_uuid << " ready for analysis";
+            calculate_results();
         }else if(m_state.contains("finished")){
             qDebug() << m_uuid << " finished";
         }
     }else
         qDebug() << "state file does not exist!";
+}
+
+QStringList Simulator::report_state(){
+    QString netlist_file_name;
+    foreach (std::string flag, flags) {
+        if(QString::fromStdString(flag).contains(".scs")){
+            netlist_file_name = QString::fromStdString(flag);
+            break;
+        }
+    }
+
+    QString state = m_state;
+    if (state == "in progress"){
+        state.append(" ").append(m_progress);
+    }
+
+    QStringList report;
+    report.push_back(QString::number(pid));
+    report.push_back(netlist_file_name);
+    report.push_back(state);
+    return report;
 }
 
 void Simulator::start(){

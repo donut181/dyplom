@@ -159,8 +159,6 @@ void OutputParser::ffTransform(){
     foreach (Complex value, m_complex_values) {
         m_fft.push_back(std::abs(value));
     }
-
-
 }
 
 void OutputParser::cutFrontDummyPoints(unsigned dummy_points){
