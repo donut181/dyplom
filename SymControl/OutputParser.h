@@ -22,13 +22,25 @@ public:
     void limitValuesNumber(unsigned n);
     void saveValuesToFile(bool printTime=false)const;//saving m_values and maybe m_times
     void saveFftToFile()const;//saving m_values and maybe m_times
-    void ffTransform();
-    std::vector<double> m_fft;
-private:
-    QString m_filename;
-    std::vector<int> m_values;
-    std::vector<double> m_times;
+    void calculateResults();
+    std::vector<double> spectrumDataFromDFT;
 
+private:
+    QString sdatFilename;
+    std::vector<int> sampledSignal;
+    std::vector<double> sampledTimePoints;
+    std::vector<int> harmonicIndexes;
+    double THD;
+    double SNHR;
+    double SFDR;
+    double SINAD;
+    double ENOB;
+
+    void fourierTransform();
+    void normalizeSpectrum();
+    void findHarmonics(int N_h);
+    void calculateMetrics();
+    void saveResultsToFiles();
 };
 
 

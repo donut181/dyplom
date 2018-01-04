@@ -38,8 +38,7 @@ class Simulator{
         void prepareCommand();
         void write_pid_to_file();
         void get_progress();
-        void calculate_results();
-        void calculate_fft();
+        void analyze_results();
 
 public:
         Simulator(QString workspace_path,QString uuid);

@@ -79,12 +79,7 @@ void MainWindow::on_actionParse_output_Sdat_triggered()
             n=128;
         }
         parser.limitValuesNumber(n);
-        parser.ffTransform();
-        std::cout << "size: " << parser.m_fft.size() << std::endl;
-        parser.saveValuesToFile();
-        std::cout << "size: " << parser.m_fft.size() << std::endl;
-        parser.saveFftToFile();
-        std::cout << "size: " << parser.m_fft.size() << std::endl;
+        parser.calculateResults();
     }
 }
 

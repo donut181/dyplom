@@ -78,5 +78,5 @@ bool Config::containsOption(const QString &key)const{
 }
 
 QString Config::getOption(const QString &key)const{
-    return m_config.value(key);
+        return m_config.value(key);
 }

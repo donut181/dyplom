@@ -87,7 +87,7 @@ void Simulator::get_progress()
     }
 }
 
-void Simulator::calculate_fft()
+void Simulator::analyze_results()
 {
     QString sdat_file_path = QString(m_workspace).append('/');
     foreach (std::string flag, flags) {
@@ -107,18 +107,7 @@ void Simulator::calculate_fft()
         n=128;
     }
     parser.limitValuesNumber(n);
-    parser.ffTransform();
-    std::cout << "size: " << parser.m_fft.size() << std::endl;
-    parser.saveValuesToFile();
-    std::cout << "size: " << parser.m_fft.size() << std::endl;
-    parser.saveFftToFile();
-    std::cout << "size: " << parser.m_fft.size() << std::endl;
-}
-
-void Simulator::calculate_results()
-{
-    calculate_fft();
-    setState("finished");
+    parser.calculateResults();
 }
 
 void Simulator::setCommand(std::string program){
@@ -182,7 +171,8 @@ void Simulator::refresh_state()
             get_progress();
         }else if(m_state.contains("ready")){
             qDebug() << m_uuid << " ready for analysis";
-            calculate_results();
+            setState("finished");
+            analyze_results();
         }else if(m_state.contains("finished")){
             qDebug() << m_uuid << " finished";
         }
